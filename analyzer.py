@@ -1,3 +1,5 @@
+from utils import calculate_average
+
 # Arbitrary values with which to measure small differences from the speaker's usual style
 PITCH_TOLERANCE = 10
 ENERGY_TOLERANCE = 0.05
@@ -39,7 +41,7 @@ class Analyzer:
             return None
 
         # Return the average pitch otherwise
-        return sum(pitches) / len(pitches)
+        return calculate_average(pitches)
 
     # Calculates the average energy, counting only observations with speech detected
     def average_energy(self):
@@ -52,7 +54,7 @@ class Analyzer:
         if not energies:
             return None
 
-        return sum(energies) / len(energies)
+        return calculate_average(energies)
 
     # Calculates the average speech rate, counting only observations with speech detected
     def average_speech_rate(self):
@@ -65,7 +67,7 @@ class Analyzer:
         if not speech_rates:
             return None
 
-        return sum(speech_rates) / len(speech_rates)
+        return calculate_average(speech_rates)
 
     # Calculate average pause ratio, counting only observations where speech is detected
     def average_pause_ratio(self):
@@ -78,7 +80,7 @@ class Analyzer:
             if not pause_ratios:
                 return None
     
-            return sum(pause_ratios) / len(pause_ratios)
+            return calculate_average(pause_ratios)
     
     # Calculate average bg noise levels, counting only observations where speech is detected
     def average_background_noise(self):
@@ -91,7 +93,7 @@ class Analyzer:
         if not noise_levels:
             return None
 
-        return sum(noise_levels) / len(noise_levels)
+        return calculate_average(noise_levels)
 
     # Calculate average signal quality, counting only observations where speech is detected
     def average_signal_quality(self):
@@ -104,7 +106,8 @@ class Analyzer:
         if not signal_qualities:
             return None
 
-        return sum(signal_qualities) / len(signal_qualities)
+        return calculate_average(signal_qualities)
+
 
     ## DIFERENCES
 
@@ -145,6 +148,7 @@ class Analyzer:
 
         return average_pause_ratio - self.session.speaker_profile.usual_pause_ratio
 
+
     ## CLASSIFICATION
 
     def classify_delivery(self):
@@ -178,6 +182,7 @@ class Analyzer:
             return "consistent"
 
         return "temporarily varied"
+
 
     ## QUALITY
     # Function to measure how trustworthy a recording is
