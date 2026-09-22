@@ -1,3 +1,9 @@
+# Arbitrary values with which to measure small differences from the speaker's usual style
+PITCH_TOLERANCE = 10
+ENERGY_TOLERANCE = 0.05
+SPEECH_RATE_TOLERANCE = 10
+PAUSE_RATIO_TOLERANCE = 0.05
+
 class Analyzer:
     # The analyzer requires a full recording session
     def __init__(self, session):
@@ -138,3 +144,37 @@ class Analyzer:
             return None
 
         return average_pause_ratio - self.session.speaker_profile.usual_pause_ratio
+
+    ## CLASSIFICATION
+
+    def classify_delivery(self):
+        # Not enough information if there is no usable speech
+        if self.usable_speech_count() == 0:
+            return "insufficient data"
+
+        # For scenarios with high background noise
+        average_noise = self.average_background_noise()
+        if average_noise > 0.70:
+            return "affected by high background noise"
+
+        pitch_difference = self.pitch_difference()
+        energy_difference = self.energy_difference()
+        speech_rate_difference = self.speech_rate_difference()
+        pause_ratio_difference = self.pause_ratio_difference()
+
+        # A recording is considered energetic when the speaker's energy is noticeably higher than their usual level
+        if energy_difference > ENERGY_TOLERANCE:
+            return "energetic"
+
+        # A recording is considered deliberate when the speaker talks slower and uses more pauses than usual
+        if (speech_rate_difference < -SPEECH_RATE_TOLERANCE and pause_ratio_difference > PAUSE_RATIO_TOLERANCE):
+            return "deliberate"  
+
+        # A recording is consistent when the delivery matches the speaker's usual profile
+        if(abs(pitch_difference) <= PITCH_TOLERANCE
+                and abs(energy_difference) <= ENERGY_TOLERANCE
+                and abs(speech_rate_difference) <= SPEECH_RATE_TOLERANCE
+                and abs(pause_ratio_difference) <= PAUSE_RATIO_TOLERANCE):
+            return "consistent"
+
+        return "unclassified"
