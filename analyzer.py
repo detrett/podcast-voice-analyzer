@@ -171,10 +171,19 @@ class Analyzer:
             return False
         return abs(value) <= tolerance
 
+    # Checks that a recording has at least half of its observation windows for reliable classification
+    def has_sufficient_speech(self):
+        total_windows = len(self.session.observations)
+        if total_windows == 0:
+            return False
+
+        usable_windows = self.usable_speech_count()
+
+        return usable_windows / total_windows >= 0.50
 
     def classify_delivery(self):
         # Not enough information if there is no usable speech
-        if self.usable_speech_count() == 0:
+        if not self.has_sufficient_speech():
             return "insufficient data"
 
         # For scenarios with high background noise
@@ -210,11 +219,10 @@ class Analyzer:
     def evaluate_quality (self):
         usable_count = self.usable_speech_count()
 
-        # No usable voice detected
-        if usable_count == 0:
+        if not self.has_sufficient_speech():
             return {
                 "label": "insufficient",
-                "reason": "No usable speech was detected"
+                "reason": "Too little usable speech was detected."
             }
 
         average_noise = self.average_background_noise()
