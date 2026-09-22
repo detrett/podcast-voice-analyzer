@@ -7,6 +7,18 @@ class Analyzer:
     def count_observations(self):
         return len(self.session.observations)
 
+    # Calculates how much of a recording can be analyzed
+    def usable_speech_count(self):
+        count = 0
+
+        for observation in self.session.observations:
+            if observation.speech_present:
+                count += 1
+
+        return count
+    
+    ## AVERAGES
+
     # Function to calculate the average pitch
     def average_pitch(self):
         pitches = []
