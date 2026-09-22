@@ -12,14 +12,6 @@ def calculate_difference(actual, usual):
 
     return actual - usual
 
-# This checks whether a difference is small enough to be considered normal according to one of the classification tolerances.
-def value_within_tolerance(value, tolerance):
-    
-    if value is None:
-        return False
-
-    return abs(value) <= tolerance
-
 # Formatting metric values for better presentation
 def format_metric(value, decimal_places=2):
     if value is None:

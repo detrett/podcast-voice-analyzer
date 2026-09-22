@@ -1,4 +1,4 @@
-from utils import calculate_average, calculate_difference, value_within_tolerance
+from utils import calculate_average, calculate_difference
 
 # Arbitrary values with which to measure small differences from the speaker's usual style
 PITCH_TOLERANCE = 10
@@ -163,6 +163,14 @@ class Analyzer:
 
 
     ## CLASSIFICATION
+    
+    # General utility function for the class to calculate if a value is within the tolerance levels
+    @staticmethod
+    def is_within_tolerance(value, tolerance):
+        if value is None:
+            return False
+        return abs(value) <= tolerance
+
 
     def classify_delivery(self):
         # Not enough information if there is no usable speech
@@ -188,10 +196,10 @@ class Analyzer:
             return "deliberate"  
 
         # A recording is consistent when the delivery matches the speaker's usual profile
-        if (value_within_tolerance(pitch_difference, PITCH_TOLERANCE)
-                and value_within_tolerance(energy_difference, ENERGY_TOLERANCE)
-                and value_within_tolerance(speech_rate_difference, SPEECH_RATE_TOLERANCE)
-                and value_within_tolerance(pause_ratio_difference, PAUSE_RATIO_TOLERANCE)):
+        if (self.is_within_tolerance(pitch_difference, PITCH_TOLERANCE)
+                and self.is_within_tolerance(energy_difference, ENERGY_TOLERANCE)
+                and self.is_within_tolerance(speech_rate_difference, SPEECH_RATE_TOLERANCE)
+                and self.is_within_tolerance(pause_ratio_difference, PAUSE_RATIO_TOLERANCE)):
             return "consistent"
 
         return "temporarily varied"
