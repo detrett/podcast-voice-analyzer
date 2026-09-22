@@ -49,4 +49,15 @@ class Analyzer:
 
         return sum(speech_rates) / len(speech_rates)
 
+    # Calculate average pause ratio, counting only observations where speech is detected
+    def average_pause_ratio(self):
+            pause_ratios = []
     
+            for observation in self.session.observations:
+                if observation.speech_present:
+                    pause_ratios.append(observation.pause_ratio)
+    
+            if not pause_ratios:
+                return None
+    
+            return sum(pause_ratios) / len(pause_ratios)
