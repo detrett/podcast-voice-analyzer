@@ -35,3 +35,18 @@ class Analyzer:
             return None
 
         return sum(energies) / len(energies)
+
+    # Calculates the average speech rate, counting only observations with speech detected
+    def average_speech_rate(self):
+        speech_rates = []
+
+        for observation in self.session.observations:
+            if observation.speech_present:
+                speech_rates.append(observation.speech_rate)
+
+        if not speech_rates:
+            return None
+
+        return sum(speech_rates) / len(speech_rates)
+
+    
