@@ -1,4 +1,4 @@
-from utils import calculate_average
+from utils import calculate_average, calculate_difference, value_within_tolerance
 
 # Arbitrary values with which to measure small differences from the speaker's usual style
 PITCH_TOLERANCE = 10
@@ -118,7 +118,10 @@ class Analyzer:
         if average_pitch is None:
             return None
 
-        return average_pitch - self.session.speaker_profile.usual_pitch
+        return calculate_difference(
+            average_pitch,
+            self.session.speaker_profile.usual_pitch
+        )
 
     # Tells us how much a recording differs from their usual energy
     def energy_difference(self):
@@ -127,7 +130,10 @@ class Analyzer:
         if average_energy is None:
             return None
 
-        return average_energy - self.session.speaker_profile.usual_energy
+        return calculate_difference(
+            average_energy,
+            self.session.speaker_profile.usual_energy
+        )
 
     # Tells us how much a recording differs from their usual speech rate
     # A positive value means faster than usual, a negative value means slower
@@ -137,7 +143,11 @@ class Analyzer:
         if average_speech_rate is None:
             return None
 
-        return average_speech_rate - self.session.speaker_profile.usual_speech_rate
+        return calculate_difference(
+            average_speech_rate,
+            self.session.speaker_profile.usual_speech_rate
+        )
+
 
     # Tells us how much a recording differs from their usual pause ratio
     def pause_ratio_difference(self):
@@ -146,7 +156,10 @@ class Analyzer:
         if average_pause_ratio is None:
             return None
 
-        return average_pause_ratio - self.session.speaker_profile.usual_pause_ratio
+        return calculate_difference(
+            average_pause_ratio,
+            self.session.speaker_profile.usual_pause_ratio
+        )
 
 
     ## CLASSIFICATION
@@ -175,10 +188,10 @@ class Analyzer:
             return "deliberate"  
 
         # A recording is consistent when the delivery matches the speaker's usual profile
-        if(abs(pitch_difference) <= PITCH_TOLERANCE
-                and abs(energy_difference) <= ENERGY_TOLERANCE
-                and abs(speech_rate_difference) <= SPEECH_RATE_TOLERANCE
-                and abs(pause_ratio_difference) <= PAUSE_RATIO_TOLERANCE):
+        if (value_within_tolerance(pitch_difference, PITCH_TOLERANCE)
+                and value_within_tolerance(energy_difference, ENERGY_TOLERANCE)
+                and value_within_tolerance(speech_rate_difference, SPEECH_RATE_TOLERANCE)
+                and value_within_tolerance(pause_ratio_difference, PAUSE_RATIO_TOLERANCE)):
             return "consistent"
 
         return "temporarily varied"
