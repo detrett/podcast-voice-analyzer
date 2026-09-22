@@ -61,6 +61,7 @@ class Analyzer:
                 return None
     
             return sum(pause_ratios) / len(pause_ratios)
+    
     # Calculate average bg noise levels, counting only observations where speech is detected
     def average_background_noise(self):
         noise_levels = []
@@ -73,3 +74,16 @@ class Analyzer:
             return None
 
         return sum(noise_levels) / len(noise_levels)
+
+    # Calculate average signal quality, counting only observations where speech is detected
+    def average_signal_quality(self):
+        signal_qualities = []
+
+        for observation in self.session.observations:
+            if observation.speech_present:
+                signal_qualities.append(observation.signal_quality)
+
+        if not signal_qualities:
+            return None
+
+        return sum(signal_qualities) / len(signal_qualities)
