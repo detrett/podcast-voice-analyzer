@@ -99,3 +99,42 @@ class Analyzer:
             return None
 
         return sum(signal_qualities) / len(signal_qualities)
+
+    ## DIFERENCES
+
+    # Tells us how much a recording differs from the average pitch
+    def pitch_difference(self):
+        average_pitch = self.average_pitch()
+
+        if average_pitch is None:
+            return None
+
+        return average_pitch - self.session.speaker_profile.usual_pitch
+
+    # Tells us how much a recording differs from their usual energy
+    def energy_difference(self):
+        average_energy = self.average_energy()
+
+        if average_energy is None:
+            return None
+
+        return average_energy - self.session.speaker_profile.usual_energy
+
+    # Tells us how much a recording differs from their usual speech rate
+    # A positive value means faster than usual, a negative value means slower
+    def speech_rate_difference(self):
+        average_speech_rate = self.average_speech_rate()
+
+        if average_speech_rate is None:
+            return None
+
+        return average_speech_rate - self.session.speaker_profile.usual_speech_rate
+
+    # Tells us how much a recording differs from their usual pause ratio
+    def pause_ratio_difference(self):
+        average_pause_ratio = self.average_pause_ratio()
+
+        if average_pause_ratio is None:
+            return None
+
+        return average_pause_ratio - self.session.speaker_profile.usual_pause_ratio
