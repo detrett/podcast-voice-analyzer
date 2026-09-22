@@ -210,3 +210,24 @@ class Analyzer:
             "label": "good",
             "reason": "The recording has usable speech, low background noise, and good signal quality"
         }
+
+    # Main analysis, stores the results in one dictionary for reusability
+    def analyze(self):
+        result = {
+            "speaker_id": self.session.speaker_profile.speaker_id,
+            "usable_speech_windows": self.usable_speech_count(),
+            "classification": self.classify_delivery(),
+            "quality": self.evaluate_quality(),
+            "average_pitch": self.average_pitch(),
+            "average_energy": self.average_energy(),
+            "average_speech_rate": self.average_speech_rate(),
+            "average_pause_ratio": self.average_pause_ratio(),
+            "average_background_noise": self.average_background_noise(),
+            "average_signal_quality": self.average_signal_quality(),
+            "pitch_difference": self.pitch_difference(),
+            "energy_difference": self.energy_difference(),
+            "speech_rate_difference": self.speech_rate_difference(),
+            "pause_ratio_difference": self.pause_ratio_difference()
+        }
+
+        return result
