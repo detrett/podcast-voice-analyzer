@@ -155,7 +155,7 @@ class Analyzer:
         # For scenarios with high background noise
         average_noise = self.average_background_noise()
         if average_noise > 0.70:
-            return "affected by high background noise"
+            return "noise affected"
 
         pitch_difference = self.pitch_difference()
         energy_difference = self.energy_difference()
@@ -177,4 +177,36 @@ class Analyzer:
                 and abs(pause_ratio_difference) <= PAUSE_RATIO_TOLERANCE):
             return "consistent"
 
-        return "unclassified"
+        return "temporarily varied"
+
+    ## QUALITY
+    # Function to measure how trustworthy a recording is
+    def evaluate_quality (self):
+        usable_count = self.usable_speech_count()
+
+        # No usable voice detected
+        if usable_count == 0:
+            return {
+                "label": "insufficient",
+                "reason": "No usable speech was detected"
+            }
+
+        average_noise = self.average_background_noise()
+        average_signal_quality = self.average_signal_quality()
+        # Measuring noise levels and signal quality
+        if average_noise > 0.70:
+            return {
+                "label": "poor",
+                "reason": "Background noise is too high"
+            }
+
+        if average_signal_quality < 0.50:
+            return {
+                "label": "poor",
+                "reason": "Signal quality is too low"
+            }
+
+        return {
+            "label": "good",
+            "reason": "The recording has usable speech, low background noise, and good signal quality"
+        }
