@@ -22,3 +22,16 @@ class Analyzer:
 
         # Return the average pitch otherwise
         return sum(pitches) / len(pitches)
+
+    # Calculates the average energy, counting only observations with speech detected
+    def average_energy(self):
+        energies = []
+
+        for observation in self.session.observations:
+            if observation.speech_present:
+                energies.append(observation.energy)
+
+        if not energies:
+            return None
+
+        return sum(energies) / len(energies)
