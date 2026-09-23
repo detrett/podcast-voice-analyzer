@@ -128,10 +128,16 @@ Clone the repository and open a terminal in the project root.
 Run the application with:
 
     python main.py
+or
+
+    python3 main.py
 
 Run the tests with:
 
     python -m unittest tests.py
+or
+
+    python3 -m unittest tests.py
 
 ## Example Output
 
@@ -162,7 +168,7 @@ These cover normal speaking behavior as well as different unusual and poor-quali
 
 ## Known Limitations
 
-The application works with generated sample data rather than recording or processing real audio.
+The application works with generated sample data rather than recording or processing real audio, it only generates one speaker too.
 
 The classification thresholds are manually defined for the project, so the classifications should not be interpreted as professional
 speech or audio analysis.
