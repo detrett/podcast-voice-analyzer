@@ -2,7 +2,7 @@ from utils import format_metric
 
 # With this function we can turn the dictionary data from the analyzer into a readable report
 def print_report(result):
-    print("\n=== Podcast Recording Analysis ===")
+    print("\n === Podcast Recording Analysis ===")
 
     print("Speaker:", result["speaker_id"])
     print("Usable speech windows:",
